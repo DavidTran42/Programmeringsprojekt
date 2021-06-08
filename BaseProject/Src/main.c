@@ -2,29 +2,29 @@
 #include "30010_io.h" 		// Input/output library for this course
 #include "ansi.h"
 #include "Excellutex.h"
+#define ESC 0x1B
 
 typedef struct {
 	int32_t x, y;
 } vector_t;
 
-int16_t SubSubRotine(uint16_t e, uint16_t f){
+int16_t SubSubRotine(uint16_t e, uint16_t f) {
 	int16_t g = 0;
 	uint16_t count = 0;
 
-	do{
+	do {
 		g = g + e;
 		count++;
-	}while(count < f);
+	} while (count < f);
 
 	return g;
 }
 
-
-int16_t SubRotine(int8_t a, int8_t b){
+int16_t SubRotine(int8_t a, int8_t b) {
 	int8_t c = 0;
 	int16_t d;
 
-	for(uint8_t i = 0;i < b; i++){
+	for (uint8_t i = 0; i < b; i++) {
 		d = c;
 		c = SubSubRotine(a, d);
 	}
@@ -32,42 +32,50 @@ int16_t SubRotine(int8_t a, int8_t b){
 }
 
 void exercise1() {
-	printf("_______________________________________________________________________________\n");
-	printf("|=============================== Debugger task ===============================|\n");
-	printf("-------------------------------------------------------------------------------\n\n");
+	printf(
+			"_______________________________________________________________________________\n");
+	printf(
+			"|=============================== Debugger task ===============================|\n");
+	printf(
+			"-------------------------------------------------------------------------------\n\n");
 	printf("User : Mark Gudmund Maja\n\n");
 	blink(1);
-	printf("Hello and welcome to this debugger task.\n"
-			"In this task you need to control the chips debugger to stop at certain points, \n");
+	printf(
+			"Hello and welcome to this debugger task.\n"
+					"In this task you need to control the chips debugger to stop at certain points, \n");
 	blink(0);
 	underline(1);
-	printf("in the code so you can produce certain screenshots and identify the values of\n"
-			"a number of variables.\n");
+	printf(
+			"in the code so you can produce certain screenshots and identify the values of\n"
+					"a number of variables.\n");
 	underline(0);
 	inverse(1);
-	printf("It is not the intent that you have to change the code nor is it allowed.\n"
-			"But you will have to answer some questions explained why some number are as\n"
-			"there are.\n\n");
+	printf(
+			"It is not the intent that you have to change the code nor is it allowed.\n"
+					"But you will have to answer some questions explained why some number are as\n"
+					"there are.\n\n");
 	inverse(0);
-	printf("|123456789|123456789|123456789|123456789|123456789|123456789|123456789|\n");
-    printf("|*    ");
-    printf("*   |   ");
-    printf("*     |     ");
-    printf("*   |  ");
-    printf("*      |    ");
-    printf("*    |  ");
-    printf("*      |      ");
-    printf("*  |\n");
-    printf("|********* *********|");
-    printf("********* ********* *********|");
+	printf(
+			"|123456789|123456789|123456789|123456789|123456789|123456789|123456789|\n");
+	printf("|*    ");
+	printf("*   |   ");
+	printf("*     |     ");
+	printf("*   |  ");
+	printf("*      |    ");
+	printf("*    |  ");
+	printf("*      |      ");
+	printf("*  |\n");
+	printf("|********* *********|");
+	printf("********* ********* *********|");
 	printf("********* *********|\n\n");
 
 	// h = SubRotine(j, i);
 
-	printf("_______________________________________________________________________________\n");
+	printf(
+			"_______________________________________________________________________________\n");
 	clreol();
 	clreol();
-	gotoxy(0,0);
+	gotoxy(0, 0);
 	clreol();
 	clrscr();
 }
@@ -75,27 +83,28 @@ void exercise1() {
 void exercise2() {
 	resetbgcolor(); // reset background color
 	clrscr(); // clear screen
-	window(10,1,50,20,"Window Title", 1);
+	window(0, 0, 20, 10, "Window Title", 1);
 }
 
 void exercise3() {
+	printf("sin(0deg): ");
 	printFix(calcSin(0));
-	printf("\n");
+	printf("\n sin(45deg): ");
 	printFix(calcSin(45));
-	printf("\n");
+	printf("\n sin(-78deg): ");
 	printFix(calcSin(-78));
-	printf("\n");
+	printf("\n sin(649deg): ");
 	printFix(calcSin(649));
-	printf("\n");
+	printf("\n cos(0deg): ");
 
 	printFix(calcCos(0));
-	printf("\n");
+	printf("\n cos(45deg): ");
 	printFix(calcCos(45));
-	printf("\n");
+	printf("\n cos(-78deg): ");
 	printFix(calcCos(-78));
-	printf("\n");
+	printf("\n cos(649deg): ");
 	printFix(calcCos(649));
-	printf("\n");
+	printf("\n\n");
 
 	vector_t v1, v2, v3, v4;
 	v1.x = 1, v1.y = 2;
@@ -104,27 +113,94 @@ void exercise3() {
 	v4.x = -4, v4.y = 2;
 
 	rotateVector(&v1, 180);
-	rotateVector(&v2,-10);
-	rotateVector(&v3,900);
-	rotateVector(&v4,-35);
-
+	rotateVector(&v2, -10);
+	rotateVector(&v3, 900);
+	rotateVector(&v4, -35);
+	printf("rotateVector((1,2), 180):\n");
 	printVector(&v1);
+	printf("rotateVector((6,4), -10):\n");
 	printVector(&v2);
+	printf("rotateVector((-4,-4), 900):\n");
 	printVector(&v3);
+	printf("rotateVector((-4,2), -35):\n");
 	printVector(&v4);
 }
 
-int main(void)
-{
+void exercise5(){
+		RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
+		RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
+		RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
+
+		GPIOC->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+		GPIOC->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+		GPIOC->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+		GPIOC->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+		uint16_t right = GPIOC->IDR & (0x0001 << 0); //Read from pin PC0
+
+		GPIOA->MODER &= ~(0x00000003 << (4 * 2)); // Clear mode register
+		GPIOA->MODER |= (0x00000000 << (4 * 2)); // Set mode register (0x00 –
+		GPIOA->PUPDR &= ~(0x00000003 << (4 * 2)); // Clear push/pull register
+		GPIOA->PUPDR |= (0x00000002 << (4 * 2)); // Set push/pull register (0x00 -
+		uint16_t up = GPIOA->IDR & (0x0001 << 4); //Read from pin PA4
+
+		GPIOB->MODER &= ~(0x00000003 << (5 * 2)); // Clear mode register
+		GPIOB->MODER |= (0x00000000 << (5 * 2)); // Set mode register (0x00 –
+		GPIOB->PUPDR &= ~(0x00000003 << (5 * 2)); // Clear push/pull register
+		GPIOB->PUPDR |= (0x00000002 << (5 * 2)); // Set push/pull register (0x00 -
+		uint16_t center = GPIOB->IDR & (0x0001 << 5); //Read from pin PB5
+
+		GPIOC->MODER &= ~(0x00000003 << (1 * 2)); // Clear mode register
+		GPIOC->MODER |= (0x00000000 << (1 * 2)); // Set mode register (0x00 –
+		GPIOC->PUPDR &= ~(0x00000003 << (1 * 2)); // Clear push/pull register
+		GPIOC->PUPDR |= (0x00000002 << (1 * 2)); // Set push/pull register (0x00 -
+		uint16_t left = GPIOC->IDR & (0x0001 << 1); //Read from pin PC5
+
+		GPIOB->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+		GPIOB->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+		GPIOB->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+		GPIOB->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+		uint16_t down = GPIOB->IDR & (0x0001 << 0); //Read from pin PA4
+
+		printf("%c[?25l", ESC);
+
+		while (1) {
+
+			right = GPIOC->IDR & (0x0001 << 0);
+			up = GPIOA->IDR & (0x0001 << 4);
+			center = GPIOB->IDR & (0x0001 << 5);
+			left = GPIOC->IDR & (0x0001 << 1);
+			down = GPIOB->IDR & (0x0001 << 0);
+			gotoxy(0, 0);
+
+			if (up = GPIOA->IDR & (0x0001 << 4)) {
+				printf("0000001");
+			} else if (down = GPIOB->IDR & (0x0001 << 0)) {
+				printf("0000010");
+			} else if (left = GPIOC->IDR & (0x0001 << 1)) {
+				printf("0000100");
+			} else if (right = GPIOC->IDR & (0x0001 << 0)) {
+				printf("0001000");
+			} else if (center = GPIOB->IDR & (0x0001 << 5)) {
+				printf("0010000");
+			} else {
+				printf("0000000");
+			}
+		}
+}
+
+
+int main(void) {
 	uint16_t h;
-	uint8_t i,j;
+	uint8_t i, j;
 	i = 10;
 	j = 3;
 	uart_init(9600);
 	// exercise1();
-	// exercise2();
+	//exercise2();
 
-	exercise3();
+	//exercise3();
+
+	exercise5();
 
 	while(1){}
 }

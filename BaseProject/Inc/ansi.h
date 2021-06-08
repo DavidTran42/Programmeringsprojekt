@@ -17,6 +17,7 @@ typedef struct vector_t v;
 
 void fgcolor(uint8_t foreground);
 void bgcolor(uint8_t background);
+void resetbgcolor();
 void color(uint8_t foreground, uint8_t background);
 void clrscr();
 void clreol();

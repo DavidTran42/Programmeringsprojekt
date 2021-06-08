@@ -103,7 +103,7 @@ void repeat(int c, int count) {
 
 void window(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char text[], uint8_t style) {
 	// Set style
-	printf(("%c[%dm"),ESC, style);
+	printf(("%c[%dm"),ESC);
 
 	if (x1 == 0) {
 		x1 = 1;
@@ -182,4 +182,5 @@ void printVector(vector_t *v) {
 	printf(")");
 	printf("\n");
 }
+
 

@@ -215,9 +215,9 @@ typedef struct vector_t {
 	int32_t x, y;
 } vector_t;
 
-typedef struct ball {
+typedef struct{
 	vector_t position, velocity;
-};
+} ball;
 
 void rotateVector(vector_t *v, int32_t degree) {
 	int32_t tempX;

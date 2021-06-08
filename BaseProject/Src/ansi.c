@@ -232,11 +232,11 @@ void updatePos(vector_t *pos, vector_t *vel) {
 }
 
 void checkCollision(vector_t *pos, vector_t *vel, int32_t box_height, int32_t box_width) {
-	// Check if it his
+	// Check if it his the wall
 	if (pos->x <= 0 || pos->x >= box_width) {
-		vel->x = x/
+		vel->x = -vel->x;
 	} else if (pos->y <= 0 || pos->y >= box_height) {
-
+		vel->y = -vel->y;
 	}
 }
 

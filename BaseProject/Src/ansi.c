@@ -215,11 +215,29 @@ typedef struct vector_t {
 	int32_t x, y;
 } vector_t;
 
+typedef struct ball {
+	vector_t position, velocity;
+};
+
 void rotateVector(vector_t *v, int32_t degree) {
 	int32_t tempX;
 	tempX = v->x * calcCos(degree) - v->y * calcSin(degree);
 	v->y = v->x * calcSin(degree) + v->y * calcCos(degree);
 	v->x = tempX;
+}
+
+void updatePos(vector_t *pos, vector_t *vel) {
+	pos->x += vel->x;
+	pos->y += vel->y;
+}
+
+void checkCollision(vector_t *pos, vector_t *vel, int32_t box_height, int32_t box_width) {
+	// Check if it his
+	if (pos->x <= 0 || pos->x >= box_width) {
+		vel->x = x/
+	} else if (pos->y <= 0 || pos->y >= box_height) {
+
+	}
 }
 
 void printVector(vector_t *v) {
@@ -297,6 +315,7 @@ void boxWithinBox(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int16_t n){
 		repeat(205,(11-2));
 		printf("%c",188);
 	}
+
 void displayText(int16_t n){
 
 }

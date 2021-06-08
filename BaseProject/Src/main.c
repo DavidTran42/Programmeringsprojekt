@@ -119,6 +119,9 @@ void exercise4(){
 	clrscr(); // clear screen
 	box(1,1,35,25,2);
 	boxWithinBox(1,1,35,25,100);
+	updatePos();
+	printBall();
+
 }
 
 int main(void)

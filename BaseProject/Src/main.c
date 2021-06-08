@@ -73,9 +73,9 @@ void exercise1() {
 }
 
 void exercise2() {
-	resetbgcolor(); // reset background color
+	color(6,0);//(Foreground,Background)
 	clrscr(); // clear screen
-	window(10,1,50,20,"Window Title", 1);
+	window2(1,1,20,20,"Window title",2);//(x1,y1,x2,y2,title,style)
 }
 
 void exercise3() {
@@ -114,6 +114,13 @@ void exercise3() {
 	printVector(&v4);
 }
 
+void exercise4(){
+	color(6,0);//(Foreground,Background)
+	clrscr(); // clear screen
+	box(1,1,35,25,2);
+	boxWithinBox(1,1,35,25,100);
+}
+
 int main(void)
 {
 	uint16_t h;
@@ -124,7 +131,7 @@ int main(void)
 	// exercise1();
 	// exercise2();
 
-	exercise3();
+	exercise4();
 
 	while(1){}
 }

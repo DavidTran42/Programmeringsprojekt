@@ -132,6 +132,54 @@ void window(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, char text[], uint8_t
 	printf("\u2518\n");
 }
 
+
+// window 2
+void window2(uint16_t x1, uint16_t y1, uint16_t x2 , uint16_t y2, char title[],int style){
+	if (style==1){
+	gotoxy(x1,y1);
+	printf("%c%c%c",201,205,186);
+	inverse(1);
+	printf(" %s",title);
+	for(int i=0; i < (x2-x1-strlen(title)-7);i++){
+		printf(" ");
+	}
+	inverse(0);
+	printf("%c%c%c",186,205,187);
+	for(int i = y1+1; i < y2-1 ;i++){
+		gotoxy(x1,i);
+		printf("%c",186);
+		repeat(' ' ,x2-2-x1);
+		printf("%c\n",186);
+		}
+	printf("%c",200);
+	repeat(205,(x2-x1-2));
+	printf("%c",188);
+	}
+	else {
+		gotoxy(x1,y1);
+			printf("%c%c%c",218,196,179);
+			inverse(1);
+			printf(" %s",title);
+			for(int i=0; i < (x2-x1-strlen(title)-7);i++){
+				printf(" ");
+			}
+			inverse(0);
+			printf("%c%c%c",179,196,191);
+			for(int i = y1+1; i < y2-1 ;i++){
+				gotoxy(x1,i);
+				printf("%c",179);
+				repeat(' ' ,x2-2-x1);
+				printf("%c\n",179);
+				}
+			printf("%c",192);
+			repeat(196,(x2-x1-2));
+			printf("%c",217);
+		}
+	}
+
+
+
+
 void printFix(int32_t i) {
 	// Prints a signed 16.16 fixed point number
 	if ((i & 0x80000000) != 0) { // Handle negative numbers
@@ -182,4 +230,78 @@ void printVector(vector_t *v) {
 	printf(")");
 	printf("\n");
 }
+
+void box(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int16_t style){
+	//Greate outside walls with style 2
+	if (style!=1){
+		gotoxy(x1,y1);
+		printf("%c",201);
+		repeat(205,(x2-x1-2));
+		printf("%c",187);
+		for(int i = y1+1; i < y2-1 ;i++){
+			gotoxy(x1,i);
+			printf("%c",186);
+			repeat(' ' ,(x2-2-x1));
+			printf("%c\n",186);
+			}
+		printf("%c",200);
+		repeat(205,(x2-x1-2));
+		printf("%c",188);
+		}
+		// Greate outside walls with style 1
+		else {
+			gotoxy(x1,y1);
+				printf("%c",218);
+				repeat(196,(x2-x1-2));
+				printf("%c",191);
+				for(int i = y1+1; i < y2-1 ;i++){
+					gotoxy(x1,i);
+					printf("%c",179);
+					repeat(' ' ,x2-2-x1);
+					printf("%c\n",179);
+					}
+				printf("%c",192);
+				repeat(196,(x2-x1-2));
+				printf("%c",217);
+			}
+		}
+
+void boxWithinBox(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int16_t n){
+	//Greate the inside box
+		gotoxy((((x2-x1)/2)-(11)/2),(((y2-y1)/2)-(5/2)+1));
+		printf("%c",201);
+		repeat(205,11-2);
+		printf("%c",187);
+		// Printer text og midste af boxen
+			gotoxy(((x2-x1)/2)-(11/2),((y2-y1)/2)-(5/2)+2);
+				printf("%c",186);
+				inverse(1);
+				if (n<10){
+					printf("Hits: %d  ",n);
+					inverse(0);
+					printf("%c\n",186);
+				}
+				else if (10<=n && n<100){
+					printf("Hits: %d ",n);
+					inverse(0);
+					printf("%c\n",186);
+				}
+				else if (n>=100){
+					printf("Hits: %d",n);
+					inverse(0);
+					printf("%c\n",186);
+				}
+		//Printer bunden af boxen
+		gotoxy(((x2-x1)/2)-(11/2),(((y2-y1)/2)-(5/2)+3));
+		printf("%c",200);
+		repeat(205,(11-2));
+		printf("%c",188);
+	}
+void displayText(int16_t n){
+
+}
+
+
+
+
 

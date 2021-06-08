@@ -222,6 +222,15 @@ void rotateVector(vector_t *v, int32_t degree) {
 	v->x = tempX;
 }
 
+void printBall(vector_t *position){
+	gotoxy(position->x,position->y);
+	printf("o");
+}
+
+
+
+
+
 void printVector(vector_t *v) {
 	printf("(");
 	printFix(v->x);
@@ -297,9 +306,7 @@ void boxWithinBox(int16_t x1,int16_t y1,int16_t x2,int16_t y2,int16_t n){
 		repeat(205,(11-2));
 		printf("%c",188);
 	}
-void displayText(int16_t n){
 
-}
 
 
 

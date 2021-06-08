@@ -7,6 +7,10 @@ typedef struct {
 	int32_t x, y;
 } vector_t;
 
+typedef struct {
+	vector_t position, velocity;
+} ball;
+
 int16_t SubSubRotine(uint16_t e, uint16_t f){
 	int16_t g = 0;
 	uint16_t count = 0;

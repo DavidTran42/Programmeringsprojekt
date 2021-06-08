@@ -2,13 +2,15 @@
 #include "30010_io.h" 		// Input/output library for this course
 #include "ansi.h"
 #include "Excellutex.h"
+#define ESC 0x1B
 
 typedef struct {
 	int32_t x, y;
 } vector_t;
 
-typedef struct {
-	vector_t position, velocity;
+typedef struct ball{
+	vector_t position;
+	vector_t velocity;
 } ball;
 
 int16_t SubSubRotine(uint16_t e, uint16_t f){
@@ -119,13 +121,25 @@ void exercise3() {
 }
 
 void exercise4(){
+	int count = 0;
 	color(6,0);//(Foreground,Background)
 	clrscr(); // clear screen
+	printf("%c[?25l",ESC);
 	box(1,1,35,25,2);
-	boxWithinBox(1,1,35,25,100);
-	updatePos();
-	printBall();
+	boxWithinBox(1,1,35,25,count);
 
+	struct ball ball1;
+	ball1.position.x = 2, ball1.position.y = 2;
+	ball1.velocity.x = 1, ball1.velocity.y = 1;
+	printBall(&ball1.position);
+	while(1){
+	boxWithinBox(1,1,35,25,count);
+	gotoxy(ball1.position.x,ball1.position.y);
+	printf(" ");
+	updatePos(&ball1.position, &ball1.velocity);
+	printBall(&ball1.position);
+	count = checkCollision(&ball1.position, &ball1.velocity, 25-2, 35-2, count);
+	}
 }
 
 int main(void)

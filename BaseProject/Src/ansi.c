@@ -215,8 +215,9 @@ typedef struct vector_t {
 	int32_t x, y;
 } vector_t;
 
-typedef struct{
-	vector_t position, velocity;
+typedef struct ball{
+	vector_t position;
+	vector_t velocity;
 } ball;
 
 void rotateVector(vector_t *v, int32_t degree) {
@@ -231,18 +232,21 @@ void updatePos(vector_t *pos, vector_t *vel) {
 	pos->y += vel->y;
 }
 
-void checkCollision(vector_t *pos, vector_t *vel, int32_t box_height, int32_t box_width) {
+int32_t checkCollision(vector_t *pos, vector_t *vel, int32_t box_height, int32_t box_width, int count) {
 	// Check if it his the wall
-	if (pos->x <= 0 || pos->x >= box_width) {
+	if (pos->x <= 2 || pos->x >= box_width) {
 		vel->x = -vel->x;
-	} else if (pos->y <= 0 || pos->y >= box_height) {
+		count++;
+	} else if (pos->y <= 2 || pos->y >= box_height) {
 		vel->y = -vel->y;
+		count++;
 	}
+	return count;
 }
 
 void printBall(vector_t *position){
-	gotoxy(position->x,position->y);
-	printf("o");
+	 gotoxy(position->x,position->y);
+	 printf("o");
 }
 
 

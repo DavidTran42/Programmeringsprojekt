@@ -122,23 +122,24 @@ void exercise3() {
 
 void exercise4(){
 	int count = 0;
+	int16_t box_h = 45, box_w = 60;
 	color(6,0);//(Foreground,Background)
 	clrscr(); // clear screen
 	printf("%c[?25l",ESC);
-	box(1,1,35,25,2);
-	boxWithinBox(1,1,35,25,count);
+	box(1,1,box_w,box_h,2);
+	boxWithinBox(1,1,box_w,box_h,count);
 
 	struct ball ball1;
 	ball1.position.x = 2, ball1.position.y = 2;
 	ball1.velocity.x = 1, ball1.velocity.y = 1;
 	printBall(&ball1.position);
 	while(1){
-	boxWithinBox(1,1,35,25,count);
+	boxWithinBox(1,1,box_w,box_h,count);
 	gotoxy(ball1.position.x,ball1.position.y);
 	printf(" ");
 	updatePos(&ball1.position, &ball1.velocity);
 	printBall(&ball1.position);
-	count = checkCollision(&ball1.position, &ball1.velocity, 25-2, 35-2, count);
+	count = checkCollision(&ball1.position, &ball1.velocity, box_h-2, box_w-2, count);
 	}
 }
 

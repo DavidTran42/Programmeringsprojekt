@@ -241,6 +241,9 @@ int32_t checkCollision(vector_t *pos, vector_t *vel, int32_t box_height, int32_t
 		vel->y = -vel->y;
 		count++;
 	}
+	if (count>999){
+		count = 0;
+	}
 	return count;
 }
 

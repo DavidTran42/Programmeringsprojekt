@@ -218,6 +218,38 @@ void exercise5() {
 	}
 }
 
+
+void enableTimer() {
+	TIM2->CR1 |= 0x0001;
+}
+
+void disableTimer() {
+	TIM2->CR1 &= 0x0000;
+}
+
+void setPrescaler(int32_t s) {
+	TIM2->PSC = s;
+}
+
+
+void exercise6() {
+	int mHz = 1;
+	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
+	enableTimer();
+	TIM2->ARR = 63999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
+	setPrescaler(0); // prescale value
+	TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+
+	NVIC_SetPriority(TIM2_IRQn, priority);
+	NVIC_EnableIRQ(TIM2_IRQn);
+
+	enableTimer();
+}
+
+void TIM2_IRQHandler(void) {
+	TIM2->SR &= ~0x0001;
+}
+
 int main(void) {
 	uint16_t h;
 	uint8_t i, j;

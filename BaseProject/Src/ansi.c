@@ -1,6 +1,7 @@
 #define ESC 0x1B
 #include "ansi.h"
 #include "Excellutex.h"
+#include "charset.h"
 
 void fgcolor(uint8_t foreground) {
 	/*  Value      foreground     Value     foreground
@@ -323,4 +324,40 @@ void boxWithinBox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t n) {
 	printf("%c", 188);
 }
 
+void pattern(uint8_t *disp) {
+	lcd_init();
+
+	uint8_t buffer[512] = { 0 }; //creating graphics buffer
+	memset(buffer, disp, 512);
+	lcd_push_buffer(buffer);
+}
+
+void lcd_write_string(uint8_t buffer[512], char *slice, uint8_t line) {
+
+	uint8_t location = 0;
+
+	for (int i = 0; i < strlen(slice); i++) {
+		for (int j = 0; j < 5; j++) {
+			buffer[location + j + (line - 1) * 128] = character_data[slice[i]
+					- 32][j];
+		}
+		location += 5;
+	}
+	lcd_push_buffer(buffer);
+
+}
+
+void lcd_update(uint8_t buffer[512], char *slice, uint8_t line) {
+
+	uint8_t location = 0;
+
+		for (int i = 0; i < strlen(slice); i++) {
+			for (int j = 0; j < 5; j++) {
+				buffer[location + j + (line - 1) * 128] = character_data[slice[i]
+						- 32][j];
+			}
+			location += 5;
+		}
+		lcd_push_buffer(buffer);
+}
 

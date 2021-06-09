@@ -243,7 +243,6 @@ void exercise6() {
 	NVIC_SetPriority(TIM2_IRQn, priority);
 	NVIC_EnableIRQ(TIM2_IRQn);
 
-	enableTimer();
 }
 
 void TIM2_IRQHandler(void) {

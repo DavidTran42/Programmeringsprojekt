@@ -8,6 +8,8 @@ typedef struct time {
 	volatile int8_t hour, min, sec, sec100;
 } time;
 
+struct time timer;
+
 typedef struct {
 	int32_t x, y;
 } vector_t;
@@ -248,17 +250,18 @@ void exercise6() {
 
 	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
 	NVIC_EnableIRQ(TIM2_IRQn);
+
+	printf("hour: %d, min: %d, sec: %d, sec100: %d",timer.hour, timer.min, timer.sec, timer.sec100);
 }
 
 void TIM2_IRQHandler(void) {
-	struct time timer;
 	timer.min = 0, timer.sec = 0, timer.hour = 0, timer.sec100 = 0;
 
-	printf("%d",TIM2->CNT);
+	timer.sec100++;
 
-	if (timer.min >= 60) {
-		timer.hour++;
-		timer.min = 0;
+	if(timer.sec100 >= 100) {
+		timer.sec++;
+		timer.sec100 = 0;
 	}
 
 	if (timer.sec >= 60) {
@@ -266,14 +269,10 @@ void TIM2_IRQHandler(void) {
 		timer.sec = 0;
 	}
 
-	if(timer.sec100 >= 100) {
-		timer.sec++;
-		timer.sec100 = 0;
+	if (timer.min >= 60) {
+		timer.hour++;
+		timer.min = 0;
 	}
-
-
-
-
 
 	TIM2->SR &= ~0x0001;
 }

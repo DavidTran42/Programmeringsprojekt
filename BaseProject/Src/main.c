@@ -305,6 +305,7 @@ void exercise6() {
 
 		int c=0;
 
+
 		while (1) {
 
 			right = GPIOC->IDR & (0x0001 << 0);
@@ -345,6 +346,20 @@ void exercise6() {
 		else{
 		}
 	}
+}
+
+void exercise6_2(char text[]) {
+	while (uart_get_count() <= 256) {
+		char last_letter = text[strlen(text)-1];
+		text[0] = uart_get_char();
+		printf("%s", text);
+		if (last_letter == '0x0D') {
+			uart_clear();
+			printf("%s", text);
+			return text;
+		}
+	}
+	return text;
 }
 
 void TIM2_IRQHandler(void) {
@@ -487,8 +502,12 @@ int main(void) {
 	//exercise4();
 	//exercise5();
 	//exercise5_2();
+	// Exercise 6.2
+	char array[252];
+	exercise6_2(array);
+	printf("%s",array);
 
-	exercise6();
+	//exercise6();
 
 	while (1) {
 	}

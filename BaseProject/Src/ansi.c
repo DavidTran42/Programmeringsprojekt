@@ -29,6 +29,7 @@ void bgcolor(uint8_t background) {
 	 The designers of HyperTerminal, however, preferred black text on white background, which is why
 	 the colors are initially like that, but when the background color is first changed there is no
 	 way comming back.
+
 	 Hint:        Use resetbgcolor(); clrscr(); to force HyperTerminal into gray text on black background.
 
 	 Value      Color
@@ -360,4 +361,5 @@ void lcd_update(uint8_t buffer[512], char *slice, uint8_t line) {
 		}
 		lcd_push_buffer(buffer);
 }
+
 

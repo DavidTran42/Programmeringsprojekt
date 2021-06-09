@@ -2,6 +2,9 @@
 #include "30010_io.h" 		// Input/output library for this course
 #include "ansi.h"
 #include "Excellutex.h"
+#include "charset.h"
+#include <string.h>
+
 #define ESC 0x1B
 
 typedef struct time {
@@ -141,7 +144,7 @@ void exercise3() {
 
 void exercise4() {
 	int count = 0;
-	int16_t box_h = 45, box_w = 60;
+	int16_t box_h = 20, box_w = 30;
 	color(6, 0); //(Foreground,Background)
 	clrscr(); // clear screen
 	printf("%c[?25l", ESC);
@@ -490,12 +493,16 @@ void exercise5_2() {
 	}
 }
 
+
+
 int main(void) {
-	uint16_t h;
-	uint8_t i, j;
-	i = 10;
-	j = 3;
+	//uint16_t h;
+	//uint8_t i, j;
+	//i = 10;
+	//j = 3;
 	uart_init(9600);
+	lcd_init();
+	uint8_t buffer[512] = { 0 }; //creating graphics buffer
 	// exercise1();
 	//exercise2();
 	//exercise3();
@@ -508,7 +515,11 @@ int main(void) {
 	printf("%s",array);
 
 	//exercise6();
-
+	//exercise5_2();
+	//pattern(0x4D);
+	lcd_write_string(buffer, "Hej med jer", 2);
+	lcd_update(buffer, "abc", 3);
+	//exercise6();
 	while (1) {
 	}
 }

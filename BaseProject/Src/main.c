@@ -4,6 +4,10 @@
 #include "Excellutex.h"
 #define ESC 0x1B
 
+typedef struct time {
+	volatile int8_t hour, min, sec, sec100;
+} time;
+
 typedef struct {
 	int32_t x, y;
 } vector_t;
@@ -236,19 +240,41 @@ void setPrescaler(int32_t s) {
 
 
 void exercise6() {
-	int mHz = 1;
 	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
 	enableTimer();
 	TIM2->ARR = 63999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
 	setPrescaler(0); // prescale value
 	TIM2->DIER |=0x0001; // Enable timer 2 interrupts
 
-	// NVIC_SetPriority(TIM2_IRQn, priority);
+	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
 	NVIC_EnableIRQ(TIM2_IRQn);
-
 }
 
 void TIM2_IRQHandler(void) {
+	struct time timer;
+	timer.min = 0, timer.sec = 0, timer.hour = 0, timer.sec100 = 0;
+
+	printf("%d",TIM2->CNT);
+
+	if (timer.min >= 60) {
+		timer.hour++;
+		timer.min = 0;
+	}
+
+	if (timer.sec >= 60) {
+		timer.min++;
+		timer.sec = 0;
+	}
+
+	if(timer.sec100 >= 100) {
+		timer.sec++;
+		timer.sec100 = 0;
+	}
+
+
+
+
+
 	TIM2->SR &= ~0x0001;
 }
 
@@ -371,7 +397,9 @@ int main(void) {
 	//exercise4();
 	//exercise5();
 
-	exercise5_2();
+	// exercise5_2();
+
+	exercise6();
 
 	while (1) {
 	}

@@ -145,6 +145,7 @@ void exercise4() {
 	struct ball ball1;
 	ball1.position.x = 2, ball1.position.y = 2;
 	ball1.velocity.x = 1, ball1.velocity.y = 1;
+
 	printBall(&ball1.position);
 	while (1) {
 		boxWithinBox(1, 1, box_w, box_h, count);
@@ -157,6 +158,8 @@ void exercise4() {
 	}
 }
 void exercise5() {
+	color(6, 0); //(Foreground,Background)
+	clrscr(); // clear screen
 	RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
 	RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
 	RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
@@ -218,6 +221,13 @@ void exercise5() {
 	}
 }
 
+void exercise6() {
+
+
+
+
+}
+
 int main(void) {
 	uint16_t h;
 	uint8_t i, j;
@@ -229,6 +239,7 @@ int main(void) {
 	//exercise3();
 	//exercise4();
 	//exercise5();
+	exercise6();
 
 	while (1) {
 	}

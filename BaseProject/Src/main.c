@@ -252,8 +252,13 @@ void splitTime2() {
 	printf("Split time 2: hour: %d, min: %d, sec: %d, sec100: %d\n", timer.hour,
 			timer.min, timer.sec, timer.sec100);
 }
+void resetTimer(){
+	disableTimer();
+	timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
+}
 
 void exercise6() {
+
 	clrscr(); // clear screen
 	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
 	enableTimer();
@@ -322,9 +327,7 @@ void exercise6() {
 			}
 
 			if (down) {
-				disableTimer();
-				timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
-
+				resetTimer();
 			} else if (c==0) {
 				enableTimer();
 			} else if (c==1) {
@@ -343,11 +346,75 @@ void exercise6() {
 		printf("\n");
 		splitTime2();
 		}
-		else{
-		}
+		printf("\n\n");
+
+
+
 	}
 }
 
+void exercise6_2() {
+	int count = 0;
+	char last_letter;
+	char text[100] = "";
+
+	clrscr(); // clear screen
+	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
+	enableTimer();
+	TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
+	setPrescaler(0); // prescale value
+	TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+
+	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
+	NVIC_EnableIRQ(TIM2_IRQn);
+
+	// printf("%c[?25l", ESC);
+	disableTimer();
+	while(1) {
+
+	gotoxy(0,0);
+	printf("hour: %d, min: %d, sec: %d, sec100: %d\n",timer.hour, timer.min, timer.sec, timer.sec100);
+
+	if (uart_get_count() > 0) {
+		gotoxy(0,9);
+		text[count] = uart_get_char();
+		last_letter = text[count];
+		printf("%s",text);
+		count++;
+	}
+
+	if (last_letter == 0x0D) {
+		if (strcmp("stop\r",text) == 0) {
+			disableTimer();
+		} else if (strcmp("start\r",text) == 0) {
+			printf("gi");
+			enableTimer();
+		} else if (strcmp("split1\r",text) == 0) {
+			gotoxy(0,2);
+			splitTime1();
+		} else if (strcmp("split2\r",text) == 0) {
+			gotoxy(0,3);
+			splitTime2();
+		} else if (strcmp("reset\r",text) == 0) {
+				disableTimer();
+				timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
+		} else if (strcmp("help",text) == 0) {
+
+		} else {
+			gotoxy(0,4);
+			printf("start: start timer \n split1: stop timer 1 \n "
+							"split2: stop timer 2 \n reset: reset timer \n"
+							"help: guide to putty");
+		}
+		uart_clear();
+		last_letter = '0';
+		memset(text, 0, sizeof(text));
+		count = 0;
+		gotoxy(0,10);
+		clreol();
+		}
+	}
+}
 
 
 void TIM2_IRQHandler(void) {
@@ -372,6 +439,11 @@ void TIM2_IRQHandler(void) {
 	TIM2->SR &= ~0x0001;
 }
 
+
+
+
+
+
 void timerInterrupt() {
 	enableTimer();
 	uint8_t flag;
@@ -389,12 +461,20 @@ void timerInterrupt() {
 
 void lcd_update(uint8_t buffer[512], uint8_t line) {
 
+	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
 	enableTimer();
+	TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
+	setPrescaler(0); // prescale value
+	TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+
+	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
+	NVIC_EnableIRQ(TIM2_IRQn);
+
 
 	while (1) {
-		uint8_t temp = 0;
-		while (timer.sec % 2 == 0) {
-			temp = 1;
+		uint8_t temp = 1;
+		if (timer.sec++) {
+			temp = 0;
 		}
 		if (temp == 1) {
 			for (int i = 512; i > 0; i--) {
@@ -404,8 +484,11 @@ void lcd_update(uint8_t buffer[512], uint8_t line) {
 				}
 			}
 		}
+		printf("%d",temp);
 	}
 }
+
+
 
 int main(void) {
 	//uint16_t h;
@@ -421,18 +504,29 @@ int main(void) {
 	//exercise4();
 	//exercise5();
 	//exercise5_2();
-	// Exercise 6.2
+	//exercise6();
+
 	//char array[252];
 	//exercise6_2(array);
 	//printf("%s",array);
+
+
+	//exercise6.2();
+	//char array[252];
+	lcd_write_string(buffer, "Hej med jer", 2);
+	lcd_update(buffer,2);
 
 	//exercise6();
 	//exercise5_2();
 
 	//pattern(0x4D);
 
-	lcd_write_string(buffer, "Hej med dig jeg hedder kaj sku bi du bi du bi dai", 2);
+	//lcd_write_string(buffer, "Hej med jer", 2);
+	//lcd_update(buffer, "abc", 3);
+	// exercise6_2();
+
 	//exercise6();
+
 	while (1) {
 	}
 }

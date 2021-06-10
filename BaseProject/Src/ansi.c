@@ -452,6 +452,7 @@ void lcd_write_string(uint8_t buffer[512], char *slice, uint8_t line) {
 	}
 	lcd_push_buffer(buffer);
 
+
 }
 
 

@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #endif /* ANSI_H_ */
 

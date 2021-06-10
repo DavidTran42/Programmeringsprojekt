@@ -324,6 +324,7 @@ void exercise6() {
 			if (down) {
 				disableTimer();
 				timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
+
 			} else if (c==0) {
 				enableTimer();
 			} else if (c==1) {

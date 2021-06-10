@@ -420,6 +420,7 @@ void lcd_update(uint8_t buffer[512], uint8_t line) {
 			}
 
 		}
+		lcd_push_buffer(buffer);
 
 	}
 }

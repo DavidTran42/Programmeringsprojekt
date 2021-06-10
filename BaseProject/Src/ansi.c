@@ -2,6 +2,7 @@
 #include "ansi.h"
 #include "Excellutex.h"
 #include "charset.h"
+#include "30010_io.h"
 
 void fgcolor(uint8_t foreground) {
 	/*  Value      foreground     Value     foreground
@@ -325,6 +326,111 @@ void boxWithinBox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t n) {
 	printf("%c", 188);
 }
 
+void turnOn(GPIO_TypeDef *pin, uint32_t pinnum) {
+
+	pin->OSPEEDR &= ~(0x00000003 << (pinnum * 2)); // Clear speed register
+	pin->OSPEEDR |= (0x00000002 << (pinnum * 2)); // set speed register (0x01 - 10
+	pin->OTYPER &= ~(0x0001 << (pinnum * 1)); // Clear output type register
+	pin->OTYPER |= (0x0000 << (pinnum)); // Set output type register (0x00 -
+	pin->MODER &= ~(0x00000003 << (pinnum * 2)); // Clear mode register
+	pin->MODER |= (0x00000001 << (pinnum * 2)); // Set mode register (0x00 –
+
+	pin->ODR &= ~(0x0001 << pinnum); //Set pin to low (turned on)
+
+}
+
+void turnOff(GPIO_TypeDef *pin, uint32_t pinnum) {
+
+	pin->OSPEEDR &= ~(0x00000003 << (pinnum * 2)); // Clear speed register
+	pin->OSPEEDR |= (0x00000002 << (pinnum * 2)); // set speed register (0x01 - 10
+	pin->OTYPER &= ~(0x0001 << (pinnum * 1)); // Clear output type register
+	pin->OTYPER |= (0x0000 << (pinnum)); // Set output type register (0x00 -
+	pin->MODER &= ~(0x00000003 << (pinnum * 2)); // Clear mode register
+	pin->MODER |= (0x00000001 << (pinnum * 2)); // Set mode register (0x00 –
+
+	pin->ODR |= (0x0001 << pinnum); //Set pin to high (turned off)
+}
+
+void exercise5_2() {
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
+
+	GPIOC->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+	GPIOC->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+	GPIOC->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+	GPIOC->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+	uint16_t right = GPIOC->IDR & (0x0001 << 0); //Read from pin PC0
+
+	GPIOA->MODER &= ~(0x00000003 << (4 * 2)); // Clear mode register
+	GPIOA->MODER |= (0x00000000 << (4 * 2)); // Set mode register (0x00 –
+	GPIOA->PUPDR &= ~(0x00000003 << (4 * 2)); // Clear push/pull register
+	GPIOA->PUPDR |= (0x00000002 << (4 * 2)); // Set push/pull register (0x00 -
+	uint16_t up = GPIOA->IDR & (0x0001 << 4); //Read from pin PA4
+
+	GPIOB->MODER &= ~(0x00000003 << (5 * 2)); // Clear mode register
+	GPIOB->MODER |= (0x00000000 << (5 * 2)); // Set mode register (0x00 –
+	GPIOB->PUPDR &= ~(0x00000003 << (5 * 2)); // Clear push/pull register
+	GPIOB->PUPDR |= (0x00000002 << (5 * 2)); // Set push/pull register (0x00 -
+	uint16_t center = GPIOB->IDR & (0x0001 << 5); //Read from pin PB5
+
+	GPIOC->MODER &= ~(0x00000003 << (1 * 2)); // Clear mode register
+	GPIOC->MODER |= (0x00000000 << (1 * 2)); // Set mode register (0x00 –
+	GPIOC->PUPDR &= ~(0x00000003 << (1 * 2)); // Clear push/pull register
+	GPIOC->PUPDR |= (0x00000002 << (1 * 2)); // Set push/pull register (0x00 -
+	uint16_t left = GPIOC->IDR & (0x0001 << 1); //Read from pin PC5
+
+	GPIOB->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+	GPIOB->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+	GPIOB->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+	GPIOB->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+	uint16_t down = GPIOB->IDR & (0x0001 << 0); //Read from pin PA4
+
+	printf("%c[?25l", ESC); //Hiding curser
+
+	while (1) {
+		right = GPIOC->IDR & (0x0001 << 0);
+		up = GPIOA->IDR & (0x0001 << 4);
+		center = GPIOB->IDR & (0x0001 << 5);
+		left = GPIOC->IDR & (0x0001 << 1);
+		down = GPIOB->IDR & (0x0001 << 0);
+
+		gotoxy(0, 0);
+
+		if (up) {
+			printf("0000001");
+			turnOn(GPIOA, 9);
+			turnOff(GPIOB, 4);
+			turnOff(GPIOC, 7);
+		} else if (down) {
+			printf("0000010");
+			turnOff(GPIOA, 9);
+			turnOn(GPIOB, 4);
+			turnOff(GPIOC, 7);
+		} else if (left) {
+			printf("0000100");
+			turnOff(GPIOA, 9);
+			turnOff(GPIOB, 4);
+			turnOn(GPIOC, 7);
+		} else if (right) {
+			printf("0001000");
+			turnOn(GPIOA, 9);
+			turnOn(GPIOB, 4);
+			turnOff(GPIOC, 7);
+		} else if (center) {
+			printf("0010000");
+			turnOff(GPIOA, 9);
+			turnOn(GPIOB, 4);
+			turnOn(GPIOC, 7);
+		} else {
+			printf("0000000");
+			turnOn(GPIOA, 9);
+			turnOff(GPIOB, 4);
+			turnOn(GPIOC, 7);
+		}
+	}
+}
+
 void pattern(uint8_t *disp) {
 	lcd_init();
 
@@ -346,20 +452,6 @@ void lcd_write_string(uint8_t buffer[512], char *slice, uint8_t line) {
 	}
 	lcd_push_buffer(buffer);
 
-}
-
-void lcd_update(uint8_t buffer[512], char *slice, uint8_t line) {
-
-	uint8_t location = 0;
-
-		for (int i = 0; i < strlen(slice); i++) {
-			for (int j = 0; j < 5; j++) {
-				buffer[location + j + (line - 1) * 128] = character_data[slice[i]
-						- 32][j];
-			}
-			location += 5;
-		}
-		lcd_push_buffer(buffer);
 }
 
 

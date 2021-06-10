@@ -232,10 +232,6 @@ void exercise5() {
 	}
 }
 
-
-
-
-
 void enableTimer() {
 	TIM2->CR1 |= 0x0001;
 }
@@ -248,14 +244,14 @@ void setPrescaler(int32_t s) {
 	TIM2->PSC = s;
 }
 
-void splitTime1(){
-	printf("Split time 1: hour: %d, min: %d, sec: %d, sec100: %d\n",timer.hour, timer.min, timer.sec, timer.sec100);
+void splitTime1() {
+	printf("Split time 1: hour: %d, min: %d, sec: %d, sec100: %d\n", timer.hour,
+			timer.min, timer.sec, timer.sec100);
 }
-void splitTime2(){
-	printf("Split time 2: hour: %d, min: %d, sec: %d, sec100: %d\n",timer.hour, timer.min, timer.sec, timer.sec100);
+void splitTime2() {
+	printf("Split time 2: hour: %d, min: %d, sec: %d, sec100: %d\n", timer.hour,
+			timer.min, timer.sec, timer.sec100);
 }
-
-
 
 void exercise6() {
 	clrscr(); // clear screen
@@ -263,142 +259,13 @@ void exercise6() {
 	enableTimer();
 	TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
 	setPrescaler(0); // prescale value
-	TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+	TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
 
 	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
 	NVIC_EnableIRQ(TIM2_IRQn);
 
 	printf("%c[?25l", ESC);
 
-		RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
-		RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
-		RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
-
-		GPIOC->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
-		GPIOC->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
-		GPIOC->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
-		GPIOC->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
-		uint16_t right = GPIOC->IDR & (0x0001 << 0); //Read from pin PC0
-
-		GPIOA->MODER &= ~(0x00000003 << (4 * 2)); // Clear mode register
-		GPIOA->MODER |= (0x00000000 << (4 * 2)); // Set mode register (0x00 –
-		GPIOA->PUPDR &= ~(0x00000003 << (4 * 2)); // Clear push/pull register
-		GPIOA->PUPDR |= (0x00000002 << (4 * 2)); // Set push/pull register (0x00 -
-		uint16_t up = GPIOA->IDR & (0x0001 << 4); //Read from pin PA4
-
-		GPIOB->MODER &= ~(0x00000003 << (5 * 2)); // Clear mode register
-		GPIOB->MODER |= (0x00000000 << (5 * 2)); // Set mode register (0x00 –
-		GPIOB->PUPDR &= ~(0x00000003 << (5 * 2)); // Clear push/pull register
-		GPIOB->PUPDR |= (0x00000002 << (5 * 2)); // Set push/pull register (0x00 -
-		uint16_t center = GPIOB->IDR & (0x0001 << 5); //Read from pin PB5
-
-		GPIOC->MODER &= ~(0x00000003 << (1 * 2)); // Clear mode register
-		GPIOC->MODER |= (0x00000000 << (1 * 2)); // Set mode register (0x00 –
-		GPIOC->PUPDR &= ~(0x00000003 << (1 * 2)); // Clear push/pull register
-		GPIOC->PUPDR |= (0x00000002 << (1 * 2)); // Set push/pull register (0x00 -
-		uint16_t left = GPIOC->IDR & (0x0001 << 1); //Read from pin PC5
-
-		GPIOB->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
-		GPIOB->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
-		GPIOB->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
-		GPIOB->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
-		uint16_t down = GPIOB->IDR & (0x0001 << 0); //Read from pin PA4
-
-		printf("%c[?25l", ESC); //hiding curser
-
-		int c=0;
-
-		while (1) {
-
-			right = GPIOC->IDR & (0x0001 << 0);
-			up = GPIOA->IDR & (0x0001 << 4);
-			center = GPIOB->IDR & (0x0001 << 5);
-			left = GPIOC->IDR & (0x0001 << 1);
-			down = GPIOB->IDR & (0x0001 << 0);
-			gotoxy(0, 0);
-
-			if (center) {
-				c++;
-			}
-			if (c==2){
-				c=0;
-			}
-
-			if (down) {
-				disableTimer();
-				timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
-			} else if (c==0) {
-				enableTimer();
-			} else if (c==1) {
-				disableTimer();
-			} else {
-			}
-
-		gotoxy(0,0);
-		printf("hour: %d, min: %d, sec: %d, sec100: %d\n",timer.hour, timer.min, timer.sec, timer.sec100);
-
-		if(left){
-		splitTime1();
-		}
-
-		else if(right){
-		printf("\n");
-		splitTime2();
-		}
-		else{
-		}
-	}
-}
-
-void TIM2_IRQHandler(void) {
-
-	timer.sec100++;
-
-	if(timer.sec100 >= 100) {
-		timer.sec++;
-		timer.sec100 = 0;
-	}
-
-	if (timer.sec >= 60) {
-		timer.min++;
-		timer.sec = 0;
-	}
-
-	if (timer.min >= 60) {
-		timer.hour++;
-		timer.min = 0;
-	}
-
-	TIM2->SR &= ~0x0001;
-}
-
-
-void turnOn(GPIO_TypeDef *pin, uint32_t pinnum) {
-
-	pin->OSPEEDR &= ~(0x00000003 << (pinnum * 2)); // Clear speed register
-	pin->OSPEEDR |= (0x00000002 << (pinnum * 2)); // set speed register (0x01 - 10
-	pin->OTYPER &= ~(0x0001 << (pinnum * 1)); // Clear output type register
-	pin->OTYPER |= (0x0000 << (pinnum)); // Set output type register (0x00 -
-	pin->MODER &= ~(0x00000003 << (pinnum * 2)); // Clear mode register
-	pin->MODER |= (0x00000001 << (pinnum * 2)); // Set mode register (0x00 –
-
-	pin->ODR &= ~(0x0001 << pinnum); //Set pin to low (turned on)
-
-}
-
-void turnOff(GPIO_TypeDef *pin, uint32_t pinnum) {
-
-	pin->OSPEEDR &= ~(0x00000003 << (pinnum * 2)); // Clear speed register
-	pin->OSPEEDR |= (0x00000002 << (pinnum * 2)); // set speed register (0x01 - 10
-	pin->OTYPER &= ~(0x0001 << (pinnum * 1)); // Clear output type register
-	pin->OTYPER |= (0x0000 << (pinnum)); // Set output type register (0x00 -
-	pin->MODER &= ~(0x00000003 << (pinnum * 2)); // Clear mode register
-	pin->MODER |= (0x00000001 << (pinnum * 2)); // Set mode register (0x00 –
-
-	pin->ODR |= (0x0001 << pinnum); //Set pin to high (turned off)
-}
-
-void exercise5_2() {
 	RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
 	RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
 	RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
@@ -433,52 +300,112 @@ void exercise5_2() {
 	GPIOB->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
 	uint16_t down = GPIOB->IDR & (0x0001 << 0); //Read from pin PA4
 
-	printf("%c[?25l", ESC); //Hiding curser
+	printf("%c[?25l", ESC); //hiding curser
+
+	int c = 0;
 
 	while (1) {
+
 		right = GPIOC->IDR & (0x0001 << 0);
 		up = GPIOA->IDR & (0x0001 << 4);
 		center = GPIOB->IDR & (0x0001 << 5);
 		left = GPIOC->IDR & (0x0001 << 1);
 		down = GPIOB->IDR & (0x0001 << 0);
-
 		gotoxy(0, 0);
 
-		if (up) {
-			printf("0000001");
-			turnOn(GPIOA, 9);
-			turnOff(GPIOB, 4);
-			turnOff(GPIOC, 7);
-		} else if (down) {
-			printf("0000010");
-			turnOff(GPIOA, 9);
-			turnOn(GPIOB, 4);
-			turnOff(GPIOC, 7);
-		} else if (left) {
-			printf("0000100");
-			turnOff(GPIOA, 9);
-			turnOff(GPIOB, 4);
-			turnOn(GPIOC, 7);
-		} else if (right) {
-			printf("0001000");
-			turnOn(GPIOA, 9);
-			turnOn(GPIOB, 4);
-			turnOff(GPIOC, 7);
-		} else if (center) {
-			printf("0010000");
-			turnOff(GPIOA, 9);
-			turnOn(GPIOB, 4);
-			turnOn(GPIOC, 7);
+		if (center) {
+			c++;
+		}
+		if (c == 2) {
+			c = 0;
+		}
+
+		if (down) {
+			disableTimer();
+			timer.hour = 0;
+			timer.min = 0;
+			timer.sec = 0;
+			timer.sec100 = 0;
+		} else if (c == 0) {
+			enableTimer();
+		} else if (c == 1) {
+			disableTimer();
 		} else {
-			printf("0000000");
-			turnOn(GPIOA, 9);
-			turnOff(GPIOB, 4);
-			turnOn(GPIOC, 7);
+		}
+
+		gotoxy(0, 0);
+		printf("hour: %d, min: %d, sec: %d, sec100: %d\n", timer.hour,
+				timer.min, timer.sec, timer.sec100);
+
+		if (left) {
+			splitTime1();
+		}
+
+		else if (right) {
+			printf("\n");
+			splitTime2();
+		} else {
 		}
 	}
 }
 
+void TIM2_IRQHandler(void) {
 
+	timer.sec100++;
+
+	if (timer.sec100 >= 100) {
+		timer.sec++;
+		timer.sec100 = 0;
+	}
+
+	if (timer.sec >= 60) {
+		timer.min++;
+		timer.sec = 0;
+	}
+
+	if (timer.min >= 60) {
+		timer.hour++;
+		timer.min = 0;
+	}
+
+	TIM2->SR &= ~0x0001;
+}
+
+void timerInterrupt() {
+	enableTimer();
+	uint8_t flag;
+	while (1) {
+		if (timer.sec++) {
+			flag = 0;
+			printf("%d", flag);
+		} else {
+			flag = 1;
+			printf("%d", flag);
+		}
+		gotoxy(0, 0);
+	}
+}
+
+void lcd_update(uint8_t buffer[512], uint8_t line) {
+
+	enableTimer();
+	while (1) {
+		uint8_t temp = 0;
+		while (timer.sec % 2 == 0) {
+			temp = 1;
+		}
+		if (temp = 1) {
+			for (int i = 512; i > 0; i--) {
+				buffer[i] = buffer[i + 1];
+				if (i == 0) {
+					buffer[0] = buffer[511];
+				}
+			}
+
+		}
+
+	}
+}
 
 int main(void) {
 	//uint16_t h;
@@ -495,12 +422,9 @@ int main(void) {
 	//exercise5();
 	//exercise5_2();
 
-	//exercise5_2();
 	//pattern(0x4D);
 	lcd_write_string(buffer, "Hej med jer", 2);
-	lcd_update(buffer, "abc", 3);
 	//exercise6();
-
 
 	while (1) {
 	}

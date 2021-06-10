@@ -352,19 +352,7 @@ void exercise6() {
 	}
 }
 
-void exercise6_2(char text[]) {
-	while (uart_get_count() <= 256) {
-		char last_letter = text[strlen(text)-1];
-		text[0] = uart_get_char();
-		printf("%s", text);
-		if (last_letter == '0x0D') {
-			uart_clear();
-			printf("%s", text);
-			return text;
-		}
-	}
-	return text;
-}
+
 
 void TIM2_IRQHandler(void) {
 
@@ -518,6 +506,7 @@ int main(void) {
 	//exercise6();
 	//exercise5_2();
 	//pattern(0x4D);
+
 	lcd_write_string(buffer, "Hej med jer", 2);
 	lcd_update(buffer, "abc", 3);
 	//exercise6();

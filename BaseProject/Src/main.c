@@ -452,17 +452,24 @@ void timerInterrupt() {
 			flag = 1;
 			printf("%d", flag);
 		}
-		gotoxy(0, 0);
 	}
 }
 
 void lcd_update(uint8_t buffer[512], uint8_t line) {
 
-	enableTimer();
+		RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
+		enableTimer();
+		TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
+		setPrescaler(0); // prescale value
+		TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+
+		NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
+		NVIC_EnableIRQ(TIM2_IRQn);
 	while (1) {
-		uint8_t temp = 0;
-		while (timer.sec % 2 == 0) {
-			temp = 1;
+		uint8_t temp = 1;
+		if (timer.sec++) {
+			temp = 0;
+			printf("%d",temp);
 		}
 		if (temp == 1) {
 			for (int i = 512; i > 0; i--) {
@@ -471,11 +478,12 @@ void lcd_update(uint8_t buffer[512], uint8_t line) {
 					buffer[511] = buffer[0];
 				}
 			}
-
+			printf("%d", temp);
+			lcd_push_buffer(buffer);
 		}
-		lcd_push_buffer(buffer);
 
 	}
+
 }
 
 
@@ -499,7 +507,9 @@ int main(void) {
 
 	//exercise6.2();
 	//char array[252];
-	lcd_write_string(buffer, "Hej med jer", 2);
+	lcd_write_string(buffer, "abcdef ghijk 123", 1);
+	lcd_update(buffer, 1);
+	//timerInterrupt();
 	//exercise6();
 	//exercise5_2();
 

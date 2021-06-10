@@ -330,6 +330,12 @@ void exercise6() {
 
 		if (down) {
 			resetTimer();
+			disableTimer();
+			timer.hour = 0;
+			timer.min = 0;
+			timer.sec = 0;
+			timer.sec100 = 0;
+
 		} else if (c == 0) {
 			enableTimer();
 		} else if (c == 1) {
@@ -468,23 +474,22 @@ void lcd_update(uint8_t buffer[512], uint8_t line) {
 	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
 	NVIC_EnableIRQ(TIM2_IRQn);
 
+
 	while (1) {
 		uint8_t temp = 0;
-		while (timer.sec100 % 8 == 0) {
+		while (timer.sec100 % 10 == 0) {
 			temp = 1;
 		}
 		if (temp == 1) {
-			for (int i = 0; i <= 511; i++) {
-				buffer[i] = buffer[i + 1];
-				if (i == 0) {
-					buffer[511] = buffer[0];
+			for (int i = (line - 1) * 128; i <= line * 128 - 1; i++) {
+				if (i == (line - 1) * 128) {
+					buffer[line * 128 - 1] = buffer[(line - 1) * 128];
 				}
+				buffer[i] = buffer[i + 1];
 			}
-
 			lcd_push_buffer(buffer);
 		}
 	}
-
 }
 
 int main(void) {
@@ -503,14 +508,16 @@ int main(void) {
 	//exercise5_2();
 	//exercise6();
 
+
 	//char array[252];
 	//exercise6_2(array);
 	//printf("%s",array);
 
 	//exercise6.2();
 	//char array[252];
-	lcd_write_string(buffer, "Hej med jer", 2);
 
+	lcd_write_string(buffer, "mbcdef ghijk 123  sdfjsndf 1238234 sdfsdfjd ", 1);
+	lcd_update(buffer, 1);
 	//timerInterrupt();
 
 	//exercise6();

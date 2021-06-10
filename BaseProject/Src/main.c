@@ -267,85 +267,86 @@ void exercise6() {
 
 	printf("%c[?25l", ESC);
 
-		RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
-		RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
-		RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOA; // Enable clock for GPIO Port A
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOB; // Enable clock for GPIO Port B
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOC; // Enable clock for GPIO Port C
 
-		GPIOC->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
-		GPIOC->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
-		GPIOC->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
-		GPIOC->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
-		uint16_t right = GPIOC->IDR & (0x0001 << 0); //Read from pin PC0
+	GPIOC->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+	GPIOC->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+	GPIOC->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+	GPIOC->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+	uint16_t right = GPIOC->IDR & (0x0001 << 0); //Read from pin PC0
 
-		GPIOA->MODER &= ~(0x00000003 << (4 * 2)); // Clear mode register
-		GPIOA->MODER |= (0x00000000 << (4 * 2)); // Set mode register (0x00 –
-		GPIOA->PUPDR &= ~(0x00000003 << (4 * 2)); // Clear push/pull register
-		GPIOA->PUPDR |= (0x00000002 << (4 * 2)); // Set push/pull register (0x00 -
-		uint16_t up = GPIOA->IDR & (0x0001 << 4); //Read from pin PA4
+	GPIOA->MODER &= ~(0x00000003 << (4 * 2)); // Clear mode register
+	GPIOA->MODER |= (0x00000000 << (4 * 2)); // Set mode register (0x00 –
+	GPIOA->PUPDR &= ~(0x00000003 << (4 * 2)); // Clear push/pull register
+	GPIOA->PUPDR |= (0x00000002 << (4 * 2)); // Set push/pull register (0x00 -
+	uint16_t up = GPIOA->IDR & (0x0001 << 4); //Read from pin PA4
 
-		GPIOB->MODER &= ~(0x00000003 << (5 * 2)); // Clear mode register
-		GPIOB->MODER |= (0x00000000 << (5 * 2)); // Set mode register (0x00 –
-		GPIOB->PUPDR &= ~(0x00000003 << (5 * 2)); // Clear push/pull register
-		GPIOB->PUPDR |= (0x00000002 << (5 * 2)); // Set push/pull register (0x00 -
-		uint16_t center = GPIOB->IDR & (0x0001 << 5); //Read from pin PB5
+	GPIOB->MODER &= ~(0x00000003 << (5 * 2)); // Clear mode register
+	GPIOB->MODER |= (0x00000000 << (5 * 2)); // Set mode register (0x00 –
+	GPIOB->PUPDR &= ~(0x00000003 << (5 * 2)); // Clear push/pull register
+	GPIOB->PUPDR |= (0x00000002 << (5 * 2)); // Set push/pull register (0x00 -
+	uint16_t center = GPIOB->IDR & (0x0001 << 5); //Read from pin PB5
 
-		GPIOC->MODER &= ~(0x00000003 << (1 * 2)); // Clear mode register
-		GPIOC->MODER |= (0x00000000 << (1 * 2)); // Set mode register (0x00 –
-		GPIOC->PUPDR &= ~(0x00000003 << (1 * 2)); // Clear push/pull register
-		GPIOC->PUPDR |= (0x00000002 << (1 * 2)); // Set push/pull register (0x00 -
-		uint16_t left = GPIOC->IDR & (0x0001 << 1); //Read from pin PC5
+	GPIOC->MODER &= ~(0x00000003 << (1 * 2)); // Clear mode register
+	GPIOC->MODER |= (0x00000000 << (1 * 2)); // Set mode register (0x00 –
+	GPIOC->PUPDR &= ~(0x00000003 << (1 * 2)); // Clear push/pull register
+	GPIOC->PUPDR |= (0x00000002 << (1 * 2)); // Set push/pull register (0x00 -
+	uint16_t left = GPIOC->IDR & (0x0001 << 1); //Read from pin PC5
 
-		GPIOB->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
-		GPIOB->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
-		GPIOB->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
-		GPIOB->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
-		uint16_t down = GPIOB->IDR & (0x0001 << 0); //Read from pin PA4
+	GPIOB->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+	GPIOB->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+	GPIOB->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+	GPIOB->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+	uint16_t down = GPIOB->IDR & (0x0001 << 0); //Read from pin PA4
 
-		printf("%c[?25l", ESC); //hiding curser
+	printf("%c[?25l", ESC); //hiding curser
 
-		int c=0;
+	int c = 0;
 
+	while (1) {
 
-		while (1) {
+		right = GPIOC->IDR & (0x0001 << 0);
+		up = GPIOA->IDR & (0x0001 << 4);
+		center = GPIOB->IDR & (0x0001 << 5);
+		left = GPIOC->IDR & (0x0001 << 1);
+		down = GPIOB->IDR & (0x0001 << 0);
+		gotoxy(0, 0);
 
-			right = GPIOC->IDR & (0x0001 << 0);
-			up = GPIOA->IDR & (0x0001 << 4);
-			center = GPIOB->IDR & (0x0001 << 5);
-			left = GPIOC->IDR & (0x0001 << 1);
-			down = GPIOB->IDR & (0x0001 << 0);
-			gotoxy(0, 0);
-
-			if (center) {
-				c++;
-			}
-			if (c==2){
-				c=0;
-			}
-
-			if (down) {
-				disableTimer();
-				timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
-			} else if (c==0) {
-				enableTimer();
-			} else if (c==1) {
-				disableTimer();
-			} else {
-			}
-
-		gotoxy(0,0);
-		printf("hour: %d, min: %d, sec: %d, sec100: %d\n",timer.hour, timer.min, timer.sec, timer.sec100);
-
-		if(left){
-		splitTime1();
+		if (center) {
+			c++;
+		}
+		if (c == 2) {
+			c = 0;
 		}
 
-		else if(right){
-		printf("\n");
-		splitTime2();
+		if (down) {
+			disableTimer();
+			timer.hour = 0;
+			timer.min = 0;
+			timer.sec = 0;
+			timer.sec100 = 0;
+		} else if (c == 0) {
+			enableTimer();
+		} else if (c == 1) {
+			disableTimer();
+		} else {
+		}
+
+		gotoxy(0, 0);
+		printf("hour: %d, min: %d, sec: %d, sec100: %d\n", timer.hour,
+				timer.min, timer.sec, timer.sec100);
+
+		if (left) {
+			splitTime1();
+		}
+
+		else if (right) {
+			printf("\n");
+			splitTime2();
 		}
 		printf("\n\n");
-
-
 
 	}
 }
@@ -360,65 +361,68 @@ void exercise6_2() {
 	enableTimer();
 	TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
 	setPrescaler(0); // prescale value
-	TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+	TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
 
 	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
 	NVIC_EnableIRQ(TIM2_IRQn);
 
 	// printf("%c[?25l", ESC);
 	disableTimer();
-	while(1) {
+	while (1) {
 
-	gotoxy(0,0);
-	printf("hour: %d, min: %d, sec: %d, sec100: %d\n",timer.hour, timer.min, timer.sec, timer.sec100);
+		gotoxy(0, 0);
+		printf("hour: %d, min: %d, sec: %d, sec100: %d\n", timer.hour,
+				timer.min, timer.sec, timer.sec100);
 
-	if (uart_get_count() > 0) {
-		gotoxy(0,9);
-		text[count] = uart_get_char();
-		last_letter = text[count];
-		printf("%s",text);
-		count++;
-	}
-
-	if (last_letter == 0x0D) {
-		if (strcmp("stop\r",text) == 0) {
-			disableTimer();
-		} else if (strcmp("start\r",text) == 0) {
-			printf("gi");
-			enableTimer();
-		} else if (strcmp("split1\r",text) == 0) {
-			gotoxy(0,2);
-			splitTime1();
-		} else if (strcmp("split2\r",text) == 0) {
-			gotoxy(0,3);
-			splitTime2();
-		} else if (strcmp("reset\r",text) == 0) {
-				disableTimer();
-				timer.hour=0; timer.min=0; timer.sec=0; timer.sec100=0;
-		} else if (strcmp("help",text) == 0) {
-
-		} else {
-			gotoxy(0,4);
-			printf("start: start timer \n split1: stop timer 1 \n "
-							"split2: stop timer 2 \n reset: reset timer \n"
-							"help: guide to putty");
+		if (uart_get_count() > 0) {
+			gotoxy(0, 9);
+			text[count] = uart_get_char();
+			last_letter = text[count];
+			printf("%s", text);
+			count++;
 		}
-		uart_clear();
-		last_letter = '0';
-		memset(text, 0, sizeof(text));
-		count = 0;
-		gotoxy(0,10);
-		clreol();
+
+		if (last_letter == 0x0D) {
+			if (strcmp("stop\r", text) == 0) {
+				disableTimer();
+			} else if (strcmp("start\r", text) == 0) {
+				printf("gi");
+				enableTimer();
+			} else if (strcmp("split1\r", text) == 0) {
+				gotoxy(0, 2);
+				splitTime1();
+			} else if (strcmp("split2\r", text) == 0) {
+				gotoxy(0, 3);
+				splitTime2();
+			} else if (strcmp("reset\r", text) == 0) {
+				disableTimer();
+				timer.hour = 0;
+				timer.min = 0;
+				timer.sec = 0;
+				timer.sec100 = 0;
+			} else if (strcmp("help", text) == 0) {
+
+			} else {
+				gotoxy(0, 4);
+				printf("start: start timer \n split1: stop timer 1 \n "
+						"split2: stop timer 2 \n reset: reset timer \n"
+						"help: guide to putty");
+			}
+			uart_clear();
+			last_letter = '0';
+			memset(text, 0, sizeof(text));
+			count = 0;
+			gotoxy(0, 10);
+			clreol();
 		}
 	}
 }
-
 
 void TIM2_IRQHandler(void) {
 
 	timer.sec100++;
 
-	if(timer.sec100 >= 100) {
+	if (timer.sec100 >= 100) {
 		timer.sec++;
 		timer.sec100 = 0;
 	}
@@ -436,11 +440,6 @@ void TIM2_IRQHandler(void) {
 	TIM2->SR &= ~0x0001;
 }
 
-
-
-
-
-
 void timerInterrupt() {
 	enableTimer();
 	uint8_t flag;
@@ -457,36 +456,30 @@ void timerInterrupt() {
 
 void lcd_update(uint8_t buffer[512], uint8_t line) {
 
-		RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
-		enableTimer();
-		TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
-		setPrescaler(0); // prescale value
-		TIM2->DIER |=0x0001; // Enable timer 2 interrupts
+	RCC->APB1ENR |= RCC_APB1Periph_TIM2; // Enable clock line to timer 2;
+	enableTimer();
+	TIM2->ARR = 639999; // Set reload value for 64x10^3 HZ - 1 (1/100 second)
+	setPrescaler(0); // prescale value
+	TIM2->DIER |= 0x0001; // Enable timer 2 interrupts
 
-		NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
-		NVIC_EnableIRQ(TIM2_IRQn);
+	NVIC_SetPriority(TIM2_IRQn, 0); // Can be from 0-15
+	NVIC_EnableIRQ(TIM2_IRQn);
 	while (1) {
-		uint8_t temp = 1;
-		if (timer.sec++) {
-			temp = 0;
-			printf("%d",temp);
+		uint8_t temp = 0;
+		while (timer.sec100%10 == 0) {
+			temp = 1;
 		}
 		if (temp == 1) {
-			for (int i = 512; i > 0; i--) {
-				buffer[i] = buffer[i + 1];
-				if (i == 0) {
-					buffer[511] = buffer[0];
+			for (int i = (line - 1) * 128; i <= line * 128 - 1; i++) {
+				if (i == (line - 1) * 128) {
+					buffer[line * 128 - 1] = buffer[(line - 1) * 128];
 				}
+				buffer[i] = buffer[i + 1];
 			}
-			printf("%d", temp);
 			lcd_push_buffer(buffer);
 		}
-
 	}
-
 }
-
-
 
 int main(void) {
 	//uint16_t h;
@@ -504,10 +497,9 @@ int main(void) {
 	//exercise5_2();
 	// Exercise 6.2
 
-
 	//exercise6.2();
 	//char array[252];
-	lcd_write_string(buffer, "abcdef ghijk 123", 1);
+	lcd_write_string(buffer, "mbcdef ghijk 123  sdfjsndf 1238234 sdfsdfjd ", 1);
 	lcd_update(buffer, 1);
 	//timerInterrupt();
 	//exercise6();

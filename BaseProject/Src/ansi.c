@@ -439,20 +439,20 @@ void pattern(uint8_t *disp) {
 	lcd_push_buffer(buffer);
 }
 
+
+
 void lcd_write_string(uint8_t buffer[512], char *slice, uint8_t line) {
 
 	uint8_t location = 0;
 
 	for (int i = 0; i < strlen(slice); i++) {
 		for (int j = 0; j < 5; j++) {
-			buffer[location + j + (line - 1) * 128] = character_data[slice[i]
-					- 32][j];
+			buffer[location + j + (line - 1) * 128] = character_data[slice[i]- 32][j];
 		}
 		location += 5;
 	}
 	lcd_push_buffer(buffer);
-
-
+	lcd_update(buffer,2);
 }
 
 

@@ -144,7 +144,7 @@ void exercise3() {
 
 void exercise4() {
 	int count = 0;
-	int16_t box_h = 20, box_w = 30;
+	int16_t box_h = 75, box_w = 270;
 	color(6, 0); //(Foreground,Background)
 	clrscr(); // clear screen
 	printf("%c[?25l", ESC);
@@ -492,18 +492,88 @@ void lcd_update(uint8_t buffer[512], uint8_t line) {
 	}
 }
 
+void exercise8() {
+	color(6, 0); //(Foreground,Background)
+	clrscr(); // clear screen
+	printf("%c[?25l", ESC);
+	uint8_t buffer[512] = { 0 };
+	char str[20];
+
+	RCC->AHBENR |= RCC_AHBPeriph_GPIOA;
+
+	GPIOA->MODER &= ~(0x00000003 << (0 * 2)); // Clear mode register
+	GPIOA->MODER |= (0x00000000 << (0 * 2)); // Set mode register (0x00 –
+	GPIOA->PUPDR &= ~(0x00000003 << (0 * 2)); // Clear push/pull register
+	GPIOA->PUPDR |= (0x00000002 << (0 * 2)); // Set push/pull register (0x00 -
+	uint16_t pin0 = GPIOA->IDR & (0x0001 << 0); //Read from pin PA0
+
+	GPIOA->MODER &= ~(0x00000003 << (1 * 2)); // Clear mode register
+	GPIOA->MODER |= (0x00000000 << (1 * 2)); // Set mode register (0x00 –
+	GPIOA->PUPDR &= ~(0x00000003 << (1 * 2)); // Clear push/pull register
+	GPIOA->PUPDR |= (0x00000002 << (1 * 2)); // Set push/pull register (0x00 -
+	uint16_t pin1 = GPIOA->IDR & (0x0001 << 1); //Read from pin PA1
+
+	RCC->CFGR2 &= ~RCC_CFGR2_ADCPRE12; // Clear ADC12 prescaler bits
+	RCC->CFGR2 |= RCC_CFGR2_ADCPRE12_DIV6; // Set ADC12 prescaler to 6
+	RCC->AHBENR |= RCC_AHBPeriph_ADC12; // Enable clock for ADC12
+
+	// ADC1
+
+	ADC1->CR = 0x00000000; // Clear CR register
+	ADC1->CFGR &= 0xFDFFC007; // Clear ADC1 config register
+	ADC1->SQR1 &= ~ADC_SQR1_L; // Clear regular sequence register 1
+
+	ADC1->CR |= 0x10000000; // Enable internal ADC voltage regulator
+	for (int i = 0; i < 1000; i++) {
+	} // Wait for about 16 microseconds
+
+	ADC1->CR |= 0x80000000; // Start ADC1 calibration
+	while (!(ADC1->CR & 0x80000000))
+		; // Wait for calibration to finish
+	for (int i = 0; i < 100; i++) {
+	} // Wait for a little while
+
+	ADC1->CR |= 0x00000001; // Enable ADC1 (0x01 - Enable, 0x02 - Disable)
+	while (!(ADC1->ISR & 0x00000001))
+		; // Wait until ready
+
+	while (1) {
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1,
+				ADC_SampleTime_1Cycles5);
+
+		ADC_StartConversion(ADC1); // Start ADC read
+		while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)
+			; // Wait for ADC read
+
+		uint16_t x1 = ADC_GetConversionValue(ADC1); // Read the ADC value
+
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1,
+				ADC_SampleTime_1Cycles5);
+
+		ADC_StartConversion(ADC1); // Start ADC read
+		while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)
+			; // Wait for ADC read
+
+		uint16_t x2 = ADC_GetConversionValue(ADC1);
+		printf("x = %04d, y = %04d", x1, x2);
+		sprintf(str, "x = %04d, y = %04d", x1, x2);
+		gotoxy(0, 0);
+		lcd_write_string(buffer, str, 1);
+	}
+}
+
 int main(void) {
 	//uint16_t h;
 	//uint8_t i, j;
 	//i = 10;
 	//j = 3;
-	uart_init(9600);
-	lcd_init();
-	uint8_t buffer[512] = { 0 }; //creating graphics buffer
+	uart_init(921600);
+	//lcd_init();
+	 //uint8_t buffer[512] = { 0 }; //creating graphics buffer
 	// exercise1();
 	//exercise2();
 	//exercise3();
-	//exercise4();
+	exercise4();
 	//exercise5();
 	//exercise5_2();
 	//exercise6();
@@ -516,8 +586,10 @@ int main(void) {
 	//exercise6.2();
 	//char array[252];
 
-	lcd_write_string(buffer, "mbcdef ghijk 123  sdfjsndf 1238234 sdfsdfjd ", 1);
-	lcd_update(buffer, 1);
+	//lcd_write_string(buffer, "mbcdef ghijk 123  sdfjsndf 1238234 sdfsdfjd ", 1);
+	//lcd_update(buffer, 1);
+	//lcd_write_string(buffer, "mbcdefghij k123sdfj snd1238234 sdfsdfjd ", 1);
+	// lcd_update(buffer, 1);
 	//timerInterrupt();
 
 	//exercise6();
@@ -530,6 +602,8 @@ int main(void) {
 	// exercise6_2();
 
 	//exercise6();
+
+	//exercise8();
 
 	while (1) {
 	}

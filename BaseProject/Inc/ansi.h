@@ -24,7 +24,7 @@ void resetbgcolor();
 void color(uint8_t foreground, uint8_t background);
 void clrscr();
 void clreol();
-void gotoxy(uint8_t x, uint8_t y);
+void gotoxy(uint16_t x, uint16_t y);
 void underline(uint8_t on);
 void blink(uint8_t on);
 void inverse(uint8_t on);

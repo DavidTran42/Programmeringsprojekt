@@ -70,7 +70,7 @@ void clreol() {
 	printf("%c[1F%c[2K", ESC, ESC);
 }
 
-void gotoxy(uint8_t x, uint8_t y) {
+void gotoxy(uint16_t x, uint16_t y) {
 	printf("%c[%d;%dH", ESC, y, x); // line = y, column = x
 }
 
@@ -271,7 +271,7 @@ void box(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t style) {
 		for (int i = y1 + 1; i < y2 - 1; i++) {
 			gotoxy(x1, i);
 			printf("%c", 186);
-			repeat(' ', (x2 - 2 - x1));
+			gotoxy(x2-x1,i);
 			printf("%c\n", 186);
 		}
 		printf("%c", 200);
@@ -287,7 +287,7 @@ void box(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t style) {
 		for (int i = y1 + 1; i < y2 - 1; i++) {
 			gotoxy(x1, i);
 			printf("%c", 179);
-			repeat(' ', x2 - 2 - x1);
+			gotoxy(x2-x1,i);
 			printf("%c\n", 179);
 		}
 		printf("%c", 192);
@@ -448,6 +448,7 @@ void lcd_write_string(uint8_t buffer[512], char *slice, uint8_t line) {
 	for (int i = 0; i < strlen(slice); i++) {
 		for (int j = 0; j < 5; j++) {
 			buffer[location + j + (line - 1) * 128] = character_data[slice[i]- 32][j];
+			buffer[location + j + (line - 1) * 128] = character_data[slice[i] - 32][j];
 		}
 		location += 5;
 	}

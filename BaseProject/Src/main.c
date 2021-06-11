@@ -466,7 +466,7 @@ void lcd_update(uint8_t buffer[512], uint8_t line) {
 	NVIC_EnableIRQ(TIM2_IRQn);
 	while (1) {
 		uint8_t temp = 0;
-		while (timer.sec100%10 == 0) {
+		while (timer.sec100 % 10 == 0) {
 			temp = 1;
 		}
 		if (temp == 1) {
@@ -513,38 +513,43 @@ void exercise8() {
 	ADC1->SQR1 &= ~ADC_SQR1_L; // Clear regular sequence register 1
 
 	ADC1->CR |= 0x10000000; // Enable internal ADC voltage regulator
-	for (int i = 0 ; i < 1000 ; i++) {} // Wait for about 16 microseconds
+	for (int i = 0; i < 1000; i++) {
+	} // Wait for about 16 microseconds
 
 	ADC1->CR |= 0x80000000; // Start ADC1 calibration
-	while (!(ADC1->CR & 0x80000000)); // Wait for calibration to finish
-	for (int i = 0 ; i < 100 ; i++) {} // Wait for a little while
+	while (!(ADC1->CR & 0x80000000))
+		; // Wait for calibration to finish
+	for (int i = 0; i < 100; i++) {
+	} // Wait for a little while
 
 	ADC1->CR |= 0x00000001; // Enable ADC1 (0x01 - Enable, 0x02 - Disable)
-	while (!(ADC1->ISR & 0x00000001)); // Wait until ready
+	while (!(ADC1->ISR & 0x00000001))
+		; // Wait until ready
 
-	while(1) {
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_1Cycles5);
+	while (1) {
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1,
+				ADC_SampleTime_1Cycles5);
 
-	ADC_StartConversion(ADC1); // Start ADC read
-	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0); // Wait for ADC read
+		ADC_StartConversion(ADC1); // Start ADC read
+		while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)
+			; // Wait for ADC read
 
-	uint16_t x1 = ADC_GetConversionValue(ADC1); // Read the ADC value
+		uint16_t x1 = ADC_GetConversionValue(ADC1); // Read the ADC value
 
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1,
+				ADC_SampleTime_1Cycles5);
 
+		ADC_StartConversion(ADC1); // Start ADC read
+		while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0)
+			; // Wait for ADC read
 
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 1, ADC_SampleTime_1Cycles5);
-
-	ADC_StartConversion(ADC1); // Start ADC read
-	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == 0); // Wait for ADC read
-
-	uint16_t x2 = ADC_GetConversionValue(ADC1);
-	printf("x = %04d, y = %04d",x1,x2);
-	sprintf(str, "x = %04d, y = %04d",x1,x2);
-	gotoxy(0,0);
-	lcd_write_string(buffer, str, 1);
+		uint16_t x2 = ADC_GetConversionValue(ADC1);
+		printf("x = %04d, y = %04d", x1, x2);
+		sprintf(str, "x = %04d, y = %04d", x1, x2);
+		gotoxy(0, 0);
+		lcd_write_string(buffer, str, 1);
 	}
 }
-
 
 int main(void) {
 	//uint16_t h;
@@ -553,7 +558,7 @@ int main(void) {
 	//j = 3;
 	uart_init(9600);
 	lcd_init();
-	// uint8_t buffer[512] = { 0 }; //creating graphics buffer
+	 uint8_t buffer[512] = { 0 }; //creating graphics buffer
 	// exercise1();
 	//exercise2();
 	//exercise3();

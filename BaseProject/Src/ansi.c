@@ -445,8 +445,7 @@ void lcd_write_string(uint8_t buffer[512], char *slice, uint8_t line) {
 
 	for (int i = 0; i < strlen(slice); i++) {
 		for (int j = 0; j < 5; j++) {
-			buffer[location + j + (line - 1) * 128] = character_data[slice[i]
-					- 32][j];
+			buffer[location + j + (line - 1) * 128] = character_data[slice[i] - 32][j];
 		}
 		location += 5;
 	}
